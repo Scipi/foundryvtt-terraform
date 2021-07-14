@@ -4,27 +4,45 @@ This guide assumes some familarity with AWS and limited familiarity with Terrafo
 # Prerequisites
  - A domain that you control and can update the DNS records to point to AWS Route53
  - A valid license for [Foundry VTT](https://foundryvtt.com)
- - A free account on [terraform.io](https//terraform.io)
- - An AWS account, with an IAM user with admin acces, access key
-   and secret access key.
+ - An AWS account, with an IAM user with admin acces, access key and secret access key.
+ - [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html) installed on your machine
+ - Terraform installed in your PATH
+ - Packer installed and in your PATH
 
 # Setup
 This setup requires two tools - packer to create the AMI with the base foundry install, and terraform to create the infrastructure such as ec2 instances and security groups.
  1. Fork this repo
- 2. Make sure you can run packer locally (``brew install packer``) on your computer and your AWS Access Keys are configured, e.g. ``aws configure``
- 3. cd to packer
- 4. Download the latest version of foundry vtt to this directory. It should be the linux version and it will be named something like ``foundryvtt-0.8.8.zip``
- 5. create a var file ``www.auto.pkrvars.hcl`` with the following variable settings
+ 2. Log into your AWS IAM user
+ 3. Create AWS access key/secret if you don't have one yet
+ 4. Create an EC2 instance 
+    - community ami - amzn2-ami-hvm-2.0.20210701.0-x86_64-gp2
+    - t2.micro
+    - default ebs storage
+    - key pair you have access to
+ 5. Stop instance
+ 6. Create image from instance - Name image ``foundry-base-0.1``
+ 7. Terminate instance
+
+You now have a base ami you own to build a foundry-specific AMI from
+
+ 8. Open the terminal on your machine
+ 9. Make sure you can run packer locally by testing ``packer`` in your terminal
+ 10. Use ``aws configure`` to add your AWS Account, Access Key and ID
+ 11. . Clone this repo to your machine using ``git clone``
+ 12.  ``cd `` to the newly created foundryvtt-terraform
+ 13.   ``cd`` to packer
+ 14.    Download the latest version of foundry vtt to the packer directory from foundryvtt.com. It should be the linux version and it will be named something like ``foundryvtt-0.8.8.zip``
+ 15.     Create a file in the packer directory ``www.auto.pkrvars.hcl`` with the following variable settings
     ```
     name = "www"
     domain = "yourdomain.com"
     region = "your preferred region"
     foundryvtt = "path-to-your-zip"
     ```
- 6. If running for the very first time, then run packer with the var file. e.g. ``packer build --var-file www.auto.pkrvars.hcl foundry.pkr.hcl``
- 7. If you already have a Foundry Data volume and are just making a new AMI for a new release, then run packer with ``packer build -only FoundryAMI\* --var-file iwww.auto.pkrvars.hcl foundry.pkr.hcl``
+ 16. If running for the very first time, then run packer with the var file. e.g. ``packer build --var-file www.auto.pkrvars.hcl foundry.pkr.hcl``
+ 17. If you already have a Foundry Data volume and are just making a new AMI for a new release, then run packer with ``packer build -only FoundryAMI\* --var-file www.auto.pkrvars.hcl foundry.pkr.hcl``
 
-You now have a base AMI which has foundry installed on it, but no SSL certificates. You should also have a Foundry Data volume
+You now have an AMI which has foundry installed on it, but no SSL certificates. You should also have a Foundry Data volume
 
  7. Create a Terraform workspace and point it to your new fork
  8. In the Variables section of your Terraform workspace, specify the following variables
