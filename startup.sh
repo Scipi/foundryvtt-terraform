@@ -10,6 +10,7 @@ if ! /root/.acme.sh/acme.sh --list | grep ${name}.${domain}; then
     echo "Getting SSL certificate for ${name}.${domain} from Let's Encrypt!"
     systemctl start httpd
     mkdir /etc/pki/tls/certs/${domain}
+    /root/.acme.sh/acme.sh --set-default-ca  --server  letsencrypt
     /root/.acme.sh/acme.sh --issue -d ${name}.${domain} -w /var/www/html --debug
     /root/.acme.sh/acme.sh --install-cert -d ${name}.${domain} \
         --cert-file /etc/pki/tls/certs/${domain}/cert.pem \

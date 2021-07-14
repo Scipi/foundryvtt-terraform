@@ -33,7 +33,7 @@ variable "region" {
 }
 variable "availability_zone" {
   type        = string
-  default     = "us-west-2a"
+  default     = "us-west-2c"
   description = "The az of the region you want to deploy to, e.g. us-west-2a"
 }
 

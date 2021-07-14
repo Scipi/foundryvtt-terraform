@@ -1,1 +1,1 @@
-/dev/xvdb     /home/ec2-user/foundrydata           xfs    defaults,noatime  1   1
+/dev/xvdb     /home/ec2-user/foundrydata           xfs    defaults,noatime,nofail  0   1

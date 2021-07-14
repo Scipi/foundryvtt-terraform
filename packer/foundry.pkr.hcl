@@ -13,12 +13,12 @@ source "amazon-ebs" "foundry-08" {
   region        = var.region
   source_ami_filter {
     filters = {
-      name                = "amzn2-ami-hvm-2.0.*.0-x86_64-gp2"
+      name                = "foundry-base-0.1"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["063843753876"]
+    owners      = ["555411608053"]
   }
   ssh_username = "ec2-user"
 
@@ -91,7 +91,7 @@ build {
     destination = "/tmp/foundryvtt.zip"
   }
   provisioner "file" {
-    source      = var.foundryvtt-zip
+    source      = "foundry.conf"
     destination = "/tmp/foundry.conf"
   }
   provisioner "file" {
@@ -112,12 +112,12 @@ source "amazon-ebsvolume" "foundrydata" {
   region        = var.region
   source_ami_filter {
     filters = {
-      name                = "amzn2-ami-hvm-2.0.*.0-x86_64-gp2"
+      name                = "foundry-base-0.1"
       root-device-type    = "ebs"
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["063843753876"]
+    owners      = ["555411608053"]
   }
   ssh_username = "ec2-user"
 
