@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "foundry-08" {
-  ami_name      = "foundryvtt-0.8.8"
+  ami_name      = "foundryvtt-scipi"
   instance_type = "t3a.micro"
   region        = var.region
   source_ami_filter {
@@ -24,9 +24,31 @@ source "amazon-ebs" "foundry-08" {
 
 }
 
-source "file" "httpd-conf" {
-  target  = "foundry.conf"
-  content = <<EOF
+variable "domain" {
+  type = string
+}
+
+variable "name" {
+  type    = string
+  default = "www"
+}
+
+variable "region" {
+  type    = string
+  default = "us-west-2"
+}
+
+build {
+  name = "FoundryAMI"
+  sources = [
+    "sources.amazon-ebs.foundry-08"
+  ]
+  provisioner "file" {
+    source      = "foundryvtt.zip"
+    destination = "/tmp/foundryvtt.zip"
+  }
+  provisioner "file" {
+    content = <<EOF
 <VirtualHost _default_:443>
     ServerName              ${var.name}.${var.domain}
     # Proxy Server Configuration
@@ -60,38 +82,6 @@ source "file" "httpd-conf" {
 LimitRequestBody 104857600 
 </Location>
 EOF
-}
-
-variable "domain" {
-  type = string
-}
-
-variable "name" {
-  type    = string
-  default = "www"
-}
-
-variable "region" {
-  type    = string
-  default = "us-west-2"
-}
-
-variable "foundryvtt-zip" {
-  type = string
-}
-
-build {
-  name = "FoundryAMI"
-  sources = [
-    "sources.file.httpd-conf",
-    "sources.amazon-ebs.foundry-08"
-  ]
-  provisioner "file" {
-    source      = "foundryvtt.zip"
-    destination = "/tmp/foundryvtt.zip"
-  }
-  provisioner "file" {
-    source      = "foundry.conf"
     destination = "/tmp/foundry.conf"
   }
   provisioner "file" {
