@@ -5,3 +5,4 @@ packer/inharnsway.auto.pkrvars.hcl
 *.tfvars
 *.tfstate
 *.tfstate*
+aws/

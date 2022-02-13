@@ -9,7 +9,7 @@ packer {
 
 source "amazon-ebs" "foundry-08" {
   ami_name      = "foundryvtt-0.8.8"
-  instance_type = "t2.micro"
+  instance_type = "t3a.micro"
   region        = var.region
   source_ami_filter {
     filters = {
@@ -18,7 +18,7 @@ source "amazon-ebs" "foundry-08" {
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["555411608053"]
+    owners      = ["410479423885"]
   }
   ssh_username = "ec2-user"
 
@@ -108,7 +108,7 @@ build {
 }
 
 source "amazon-ebsvolume" "foundrydata" {
-  instance_type = "t2.micro"
+  instance_type = "t3a.micro"
   region        = var.region
   source_ami_filter {
     filters = {
@@ -117,18 +117,18 @@ source "amazon-ebsvolume" "foundrydata" {
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["555411608053"]
+    owners      = ["410479423885"]
   }
   ssh_username = "ec2-user"
 
   ebs_volumes {
-    volume_type           = "gp2"
+    volume_type           = "gp3"
     device_name           = "/dev/sdb"
     delete_on_termination = false
     tags = {
       Name = "Foundry Data"
     }
-    volume_size = 10
+    volume_size = 30
   }
 
 }

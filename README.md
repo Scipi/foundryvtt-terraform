@@ -1,4 +1,4 @@
-# Setup of FoundryVTT in AWS using Terraform
+ # Setup of FoundryVTT in AWS using Terraform
 This guide assumes some familarity with AWS and limited familiarity with Terraform. I wrote it to get better at Terraform.
 
 # Prerequisites

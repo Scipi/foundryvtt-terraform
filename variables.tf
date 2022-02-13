@@ -6,7 +6,6 @@ variable "home_cidr" {
 variable "ami_owner" {
   type        = string
   description = "The owner id of the AMI for Foundry. This is found in the EC2->AMIs section of the AWS console."
-  default     = "137112412989"
 }
 
 variable "ami_wildcard" {
@@ -28,12 +27,12 @@ variable "domain" {
 
 variable "region" {
   type        = string
-  default     = "us-west-2"
+  default     = "us-east-1"
   description = "The region you want to deploy to, e.g. us-west-2"
 }
 variable "availability_zone" {
   type        = string
-  default     = "us-west-2c"
+  default     = "us-east-1a"
   description = "The az of the region you want to deploy to, e.g. us-west-2a"
 }
 
@@ -45,7 +44,7 @@ variable "public_key" {
 variable "name" {
   type        = string
   description = "The domain name for your instance, e.g. www"
-  default     = "www"
+  default     = "scipi-foundry"
 }
 
 variable "ebs_name" {
