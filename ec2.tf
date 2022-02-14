@@ -28,6 +28,9 @@ resource "aws_instance" "foundry" {
   iam_instance_profile   = aws_iam_instance_profile.foundry_profile.id
   key_name               = aws_key_pair.login.key_name
   vpc_security_group_ids = [aws_security_group.allow_http.id, aws_security_group.ssh_from_home.id]
+  tags = {
+    Name = "ScipiFoundryServer"
+  }
 }
 
 resource "aws_volume_attachment" "ebs_attachment" {
