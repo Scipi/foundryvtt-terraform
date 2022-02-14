@@ -54,7 +54,7 @@ resource "aws_security_group" "ssh" {
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
-    description = "SSH from home"
+    description = "SSH"
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"

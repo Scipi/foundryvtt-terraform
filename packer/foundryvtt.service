@@ -4,6 +4,8 @@ Description=Foundry VTT
 [Service]
 ExecStart=/usr/bin/node /home/ec2-user/foundryvtt/resources/app/main.js --dataPath=/home/ec2-user/foundrydata
 User=ec2-user
+Restart=always
+RestartSec=1
 
 [Install]
 WantedBy=default.target

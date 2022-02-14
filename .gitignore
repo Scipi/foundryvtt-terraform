@@ -6,3 +6,4 @@ packer/inharnsway.auto.pkrvars.hcl
 *.tfstate
 *.tfstate*
 aws/
+packer/www.auto.pkrvars.hcl
