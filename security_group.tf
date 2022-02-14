@@ -48,9 +48,9 @@ resource "aws_security_group" "allow_http" {
 }
 
 
-resource "aws_security_group" "ssh_from_home" {
-  name        = "ssh_from_home"
-  description = "Allow ssh inbound traffic from home"
+resource "aws_security_group" "ssh" {
+  name        = "ssh"
+  description = "Allow ssh inbound traffic"
   vpc_id      = aws_default_vpc.default.id
 
   ingress {
@@ -58,10 +58,10 @@ resource "aws_security_group" "ssh_from_home" {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
-    cidr_blocks = [var.home_cidr]
+    cidr_blocks = ["0.0.0.0/0"]
   }
 
   tags = {
-    Name = "allow_ssh_from_home"
+    Name = "allow_ssh"
   }
 }
