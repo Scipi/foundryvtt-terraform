@@ -1,3 +1,9 @@
+variable "name" {
+  type        = string
+  description = "The name of the instance owner"
+  default     = "default"
+}
+
 variable "home_cidr" {
   type        = string
   description = "The CIDR address (/32) to allow SSH for"
@@ -41,10 +47,10 @@ variable "public_key" {
   description = "the public half of the key pair to allow you to ssh in."
 }
 
-variable "name" {
+variable "subdomain" {
   type        = string
-  description = "The domain name for your instance, e.g. www"
-  default     = "scipi-foundry"
+  description = "The subdomain name for your instance, e.g. www"
+  default     = "www"
 }
 
 variable "ebs_name" {

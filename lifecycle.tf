@@ -1,5 +1,5 @@
 resource "aws_iam_role" "dlm_lifecycle_role" {
-  name = "dlm-lifecycle-role"
+  name = "${var.name}-dlm-lifecycle-role"
 
   assume_role_policy = <<EOF
 {
@@ -19,7 +19,7 @@ EOF
 }
 
 resource "aws_iam_role_policy" "dlm_lifecycle" {
-  name = "dlm-lifecycle-policy"
+  name = "${var.name}-dlm-lifecycle-policy"
   role = aws_iam_role.dlm_lifecycle_role.id
 
   policy = <<EOF
@@ -77,7 +77,7 @@ resource "aws_dlm_lifecycle_policy" "backup_data" {
     }
 
     target_tags = {
-      Function = "fvtt_data"
+      Name = var.ebs_name
     }
   }
 }

@@ -1,5 +1,5 @@
 resource "aws_iam_role_policy" "foundry_s3_access_policy" {
-  name   = "foundry_s3_access_policy"
+  name   = "${var.name}_foundry_s3_access_policy"
   role   = aws_iam_role.foundry_role.id
   policy = <<EOF
 {
@@ -19,8 +19,8 @@ resource "aws_iam_role_policy" "foundry_s3_access_policy" {
                 "s3:PutObjectAcl"
             ],
             "Resource": [
-                "arn:aws:s3:::vtt-assets-${var.domain}",
-                "arn:aws:s3:::vtt-assets-${var.domain}/*"
+                "arn:aws:s3:::${var.name}-vtt-assets-${var.domain}",
+                "arn:aws:s3:::${var.name}-vtt-assets-${var.domain}/*"
             ]
         }
     ]
@@ -28,7 +28,7 @@ resource "aws_iam_role_policy" "foundry_s3_access_policy" {
 EOF
 }
 resource "aws_iam_role" "foundry_role" {
-  name = "foundry_role"
+  name = "${var.name}_foundry_role"
 
   assume_role_policy = <<-EOF
   {
@@ -47,7 +47,7 @@ resource "aws_iam_role" "foundry_role" {
   EOF
 }
 resource "aws_s3_bucket" "vtt-assets" {
-  bucket = "vtt-assets-${replace(var.domain,".","-")}"
+  bucket = "${var.name}-vtt-assets-${replace(var.domain,".","-")}"
   acl    = "public-read"
   cors_rule {
     allowed_headers = ["*"]

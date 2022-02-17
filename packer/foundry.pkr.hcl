@@ -8,7 +8,7 @@ packer {
 }
 
 source "amazon-ebs" "foundry-08" {
-  ami_name      = "foundryvtt-scipi"
+  ami_name      = "foundryvtt-${var.owner}"
   instance_type = "t3a.micro"
   region        = var.region
   source_ami_filter {
@@ -18,13 +18,20 @@ source "amazon-ebs" "foundry-08" {
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["410479423885"]
+    owners      = [var.owner_id]
   }
   ssh_username = "ec2-user"
-
 }
 
 variable "domain" {
+  type = string
+}
+
+variable "owner" {
+  type = string
+}
+
+variable "owner_id" {
   type = string
 }
 
@@ -50,7 +57,7 @@ build {
   provisioner "file" {
     content = <<EOF
 <VirtualHost _default_:443>
-    ServerName              ${var.name}.${var.domain}
+    ServerName              ${var.subdomain}.${var.domain}
     # Proxy Server Configuration
     ProxyPreserveHost       On
     ProxyPass "/socket.io/" "ws://localhost:30000/socket.io/"
@@ -67,13 +74,13 @@ build {
     SSLCertificateChainFile /etc/pki/tls/certs/${var.domain}/fullchain.pem
 </VirtualHost>
 <VirtualHost *:80>
-    ServerName              ${var.name}.${var.domain}
+    ServerName              ${var.subdomain}.${var.domain}
     # Anything starting with a 'dot' might be part of the let's encrypt program. Don't redirect it
     <Location ~ "^/\..*$">
     </Location>
     # If it *doesn't start with a dot, then re-direct it to https.
     <Location ~ "(^$|^/[^\.].*$)">
-        Redirect / https://${var.name}.${var.domain}/join
+        Redirect / https://${var.subdomain}.${var.domain}/join
     </Location>
 </VirtualHost>
 # Increase the maximum upload limit Apache will allow
@@ -107,7 +114,7 @@ source "amazon-ebsvolume" "foundrydata" {
       virtualization-type = "hvm"
     }
     most_recent = true
-    owners      = ["410479423885"]
+    owners      = [var.owner_id]
   }
   ssh_username = "ec2-user"
 
@@ -116,11 +123,10 @@ source "amazon-ebsvolume" "foundrydata" {
     device_name           = "/dev/sdb"
     delete_on_termination = false
     tags = {
-      Name = "Foundry Data"
+      Name = "${var.owner}-foundry-data"
     }
     volume_size = 30
   }
-
 }
 
 build {
